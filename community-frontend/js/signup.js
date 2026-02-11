@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = CONFIG.BASE_URL; 
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. 요소 가져오기
@@ -123,12 +123,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const nickname = nicknameInput.value;
         const hasSpace = /\s/.test(nickname);
 
+        const hasSpecialChar = /[<>"&']/.test(nickname);
+
         if (nickname === "") {
             nicknameError.textContent = "* 닉네임을 입력해주세요.";
             isNicknameValid = false;
         } else if (hasSpace) {
             nicknameError.textContent = "* 띄어쓰기를 없애주세요.";
             isNicknameValid = false;
+        } else if (hasSpecialChar) {
+        nicknameError.textContent = "* 특수문자(<, >, &, \", ')는 사용할 수 없습니다.";
+        isNicknameValid = false; 
         } else if (nickname.length > 10) {
             nicknameError.textContent = "* 닉네임은 최대 10자 까지 작성 가능합니다.";
             isNicknameValid = false;

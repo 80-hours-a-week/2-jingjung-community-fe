@@ -1,7 +1,6 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = CONFIG.BASE_URL; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. 요소 가져오기
     const headerDropdown = document.getElementById("headerDropdown");
     
     const passwordInput = document.getElementById("password");
@@ -88,6 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!isPasswordValid || !isPasswordConfirmValid) return;
 
+        submitBtn.disabled = true;
+
         try {
             const response = await fetch(`${BASE_URL}/users/me/password`, {
                 method: "PUT",
@@ -108,10 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 const errorData = await response.json();
                 alert(errorData.detail || "비밀번호 수정에 실패했습니다.");
+                submitBtn.disabled = false;
             }
         } catch (error) {
             console.error("Update Error:", error);
             alert("서버 연결에 실패했습니다.");
+            submitBtn.disabled = false;
         }
     });
 

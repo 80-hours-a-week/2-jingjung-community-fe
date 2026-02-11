@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = CONFIG.BASE_URL; 
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. 요소 가져오기
