@@ -1,15 +1,12 @@
-const BASE_URL = "http://localhost:8000"; 
+const BASE_URL = CONFIG.BASE_URL; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. 요소 가져오기
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const loginBtn = document.getElementById("loginBtn");
-    
     const emailError = document.getElementById("emailError");
     const passwordError = document.getElementById("passwordError");
 
-    // 2. 이메일 유효성 검사 함수 
     function validateEmail() {
         const email = emailInput.value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
@@ -26,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 3. 비밀번호 유효성 검사 함수 
     function validatePassword() {
         const password = passwordInput.value;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
@@ -43,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 4. 버튼 상태 업데이트 함수
     function updateButtonState() {
         const isEmailValid = validateEmail();
         const isPasswordValid = validatePassword();
@@ -57,11 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 5. 입력 시 실시간 검사 이벤트 연결
     emailInput.addEventListener("input", updateButtonState);
     passwordInput.addEventListener("input", updateButtonState);
 
-    // 6. 로그인 버튼 클릭 시 Fetch 실행
     loginBtn.addEventListener("click", async () => {
         const email = emailInput.value;
         const password = passwordInput.value;

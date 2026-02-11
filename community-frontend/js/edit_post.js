@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = CONFIG.BASE_URL; 
 
 document.addEventListener("DOMContentLoaded", async () => {
     const backBtn = document.getElementById("backBtn");
@@ -22,7 +22,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // 기존 데이터 불러오기 (GET)
+
+    if (headerProfileIcon && headerDropdown) {
+        headerProfileIcon.addEventListener("click", (e) => {
+            e.stopPropagation();
+            headerDropdown.classList.toggle("hidden");
+        });
+        document.addEventListener("click", (e) => {
+            if (!headerProfileIcon.contains(e.target) && !headerDropdown.contains(e.target)) {
+                headerDropdown.classList.add("hidden");
+            }
+        });
+    }
+
+    // 뒤로가기
+    if (backBtn) {
+        backBtn.addEventListener("click", () => {
+            window.location.href = `post_detail.html?id=${postId}`;
+        });
+    }
+
+    imageInput.addEventListener("change", () => {
+        if (imageInput.files.length > 0) {
+            fileNameDisplay.textContent = imageInput.files[0].name;
+        } else {
+            fileNameDisplay.textContent = "선택된 파일 없음";
+        }
+    });
+
     async function loadPostData() {
         try {
             const response = await fetch(`${BASE_URL}/posts/${postId}`, {
@@ -54,59 +81,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     loadPostData();
-
-    // 기능 로직 (드롭다운, 파일선택, 뒤로가기)
     
-    // 드롭다운
-    if (headerProfileIcon && headerDropdown) {
-        headerProfileIcon.addEventListener("click", (e) => {
-            e.stopPropagation();
-            headerDropdown.classList.toggle("hidden");
-        });
-        document.addEventListener("click", (e) => {
-            if (!headerProfileIcon.contains(e.target) && !headerDropdown.contains(e.target)) {
-                headerDropdown.classList.add("hidden");
-            }
-        });
-    }
 
-    // 뒤로가기
-    if (backBtn) {
-        backBtn.addEventListener("click", () => {
-            window.location.href = `post_detail.html?id=${postId}`;
-        });
-    }
-
-    // 파일 선택 시 이름 표시
-    imageInput.addEventListener("change", () => {
-        if (imageInput.files.length > 0) {
-            fileNameDisplay.textContent = imageInput.files[0].name;
-        } else {
-            fileNameDisplay.textContent = "선택된 파일 없음";
-        }
-    });
-
-    // 제목/내용 입력 시 에러 메시지 삭제
     const clearError = () => { helperText.textContent = ""; };
     titleInput.addEventListener("input", clearError);
     contentInput.addEventListener("input", clearError);
 
-    // 수정 완료 요청 (PUT)
     submitBtn.addEventListener("click", async () => {
         const titleValue = titleInput.value.trim();
         const contentValue = contentInput.value.trim();
         const imageFile = imageInput.files[0];
 
-        // 유효성 검사
         if (titleValue === "" || contentValue === "") {
             helperText.textContent = "*제목, 내용을 모두 작성해주세요";
             return;
         }
 
         submitBtn.disabled = true;
-        submitBtn.textContent = "수정 중...";
 
-        // FormData 생성
         const formData = new FormData();
         formData.append("title", titleValue);
         formData.append("content", contentValue);
@@ -128,16 +120,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 const errorData = await response.json();
                 alert(errorData.detail || "수정에 실패했습니다.");
-            
+        
                 submitBtn.disabled = false;
-                submitBtn.textContent = "수정하기";
             }
         } catch (error) {
             console.error("Update Error:", error);
             alert("서버 연결에 실패했습니다.");
 
             submitBtn.disabled = false;
-            submitBtn.textContent = "수정하기";
         }
     });
 });

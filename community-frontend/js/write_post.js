@@ -1,5 +1,4 @@
-// 백엔드 주소
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = CONFIG.BASE_URL; 
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. 드롭다운 기능
